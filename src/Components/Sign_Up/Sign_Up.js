@@ -1,73 +1,111 @@
 import React, { useState } from 'react';
 import './Sign_Up.css';
+import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config';
 
-function SignUp() {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    password: ''
-  });
+const Sign_Up = () => {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const [showerr, setShowerr] = useState('');
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
+    const navigate = useNavigate();
 
-  const validateForm = () => {
-    const { phone } = formData;
-    return phone.match(/^\d{10}$/);
-  };
+    const register = async (e) => {
+        e.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      alert('Form is valid');
-      // Submit form or further processing
-    } else {
-      alert('Phone number must be 10 digits');
-    }
-  };
+        const response = await fetch(`${API_URL}/api/auth/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name,
+                email,
+                password,
+                phone,
+            }),
+        });
 
-  return (
-    <div className="container" style={{ marginTop: '5%' }}>
-      <div className="signup-grid">
-        <div className="signup-text">
-          <h1>Sign Up</h1>
+        const json = await response.json();
+
+        if (json.authtoken) {
+            sessionStorage.setItem("auth-token", json.authtoken);
+            navigate("/");
+            window.location.reload();
+        } else {
+            setShowerr(json.errors ? json.errors[0].msg : json.error);
+        }
+    };
+
+    return (
+        <div className="container" style={{ marginTop: '5%' }}>
+            <div className="signup-grid">
+                <div className="signup-form">
+                    <form method="POST" onSubmit={register}>
+                        {/* Name field */}
+                        <div className="form-group">
+                            <label htmlFor="name">Name</label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                className="form-control" 
+                                placeholder="Enter your name" 
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </div>
+
+                        {/* Email field */}
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                className="form-control" 
+                                placeholder="Enter your email" 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+
+                        {/* Phone field */}
+                        <div className="form-group">
+                            <label htmlFor="phone">Phone</label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                className="form-control" 
+                                placeholder="Enter your phone" 
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                            />
+                        </div>
+
+                        {/* Password field */}
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                className="form-control" 
+                                placeholder="Enter your password" 
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+
+                        {showerr && <div className="err" style={{ color: 'red' }}>{showerr}</div>}
+
+                        <div className="btn-group">
+                            <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div className="signup-text1" style={{ textAlign: 'left' }}>
-          Already a member? <span><a href="../Login/Login.html" style={{ color: '#2190FF' }}> Login</a></span>
-        </div>
-        <div className="signup-form">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input type="text" name="name" id="name" required className="form-control" placeholder="Enter your name" aria-describedby="helpId" onChange={handleInputChange} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="phone">Phone</label>
-              <input type="tel" name="phone" id="phone" required className="form-control" placeholder="Enter your phone number" aria-describedby="helpId" onChange={handleInputChange} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input type="email" name="email" id="email" required className="form-control" placeholder="Enter your email" aria-describedby="helpId" onChange={handleInputChange} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input type="password" name="password" id="password" required className="form-control" placeholder="Enter your password" aria-describedby="helpId" onChange={handleInputChange} />
-            </div>
-            <div className="btn-group">
-              <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">Submit</button>
-              <button type="reset" className="btn btn-danger mb-2 waves-effect waves-light">Reset</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
 
-export default SignUp;
+export default Sign_Up;
