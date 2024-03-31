@@ -31,12 +31,17 @@ const Sign_Up = () => {
         const json = await response.json();
 
         if (json.authtoken) {
-            sessionStorage.setItem("auth-token", json.authtoken);
-            navigate("/");
-            window.location.reload();
+            // Successful registration logic
         } else {
-            setShowerr(json.errors ? json.errors[0].msg : json.error);
+            // Handle errors. If json.errors is an array, map over it to get messages.
+            const errorMessages = json.errors 
+                ? json.errors.map(err => err.msg).join(", ") // Join all error messages into one string
+                : json.error 
+                    ? json.error.toString() // Convert a single error message to string if it's not one already
+                    : "An unknown error occurred"; // Fallback error message
+            setShowerr(errorMessages);
         }
+        
     };
 
     return (
@@ -96,7 +101,7 @@ const Sign_Up = () => {
                             />
                         </div>
 
-                        {showerr && <div className="err" style={{ color: 'red' }}>{showerr}</div>}
+                        {showerr && <div className="err" style={{ color: 'red' }}>{showerr.msg || showerr}</div>}
 
                         <div className="btn-group">
                             <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">Sign Up</button>
