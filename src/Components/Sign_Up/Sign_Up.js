@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import './Sign_Up.css';
+import './Sign_Up.css'
 import { useNavigate } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { API_URL } from '../../config';
 
 const Sign_Up = () => {
@@ -15,16 +16,18 @@ const Sign_Up = () => {
     const register = async (e) => {
         e.preventDefault();
 
+        // API Call
         const response = await fetch(`${API_URL}/api/auth/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                name,
-                email,
-                password,
-                phone,
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+
             }),
         });
 
@@ -32,82 +35,59 @@ const Sign_Up = () => {
 
         if (json.authtoken) {
             sessionStorage.setItem("auth-token", json.authtoken);
-            sessionStorage.setItem("email", email); // store email in session storage
-            navigate('/'); // Navigate to home page after successful sign up
+            sessionStorage.setItem("name", name);
+            sessionStorage.setItem("phone", phone);
+            sessionStorage.setItem("email", email);
+            navigate("/");
+            window.location.reload();
         } else {
-            const errorMessage = json.errors 
-                ? json.errors.map(err => err.msg).join(", ")
-                : json.error || "An unknown error occurred";
-            setShowerr(errorMessage);
+            if (json.errors) {
+                for (const error of json.errors) {
+                    setShowerr(error.msg);
+                }
+            } else {
+                setShowerr(json.error);
+            }
         }
     };
 
+    const resetForm = () => {
+        setName('');
+        setEmail('');
+        setPhone('');
+        setPassword('');
+        setShowerr('');
+    };
+
     return (
-        <div className="container" style={{ marginTop: '5%' }}>
+        <div className="container" style={{marginTop:'5%'}}>
             <div className="signup-grid">
                 <div className="signup-form">
                     <form method="POST" onSubmit={register}>
-                        {/* Name field */}
                         <div className="form-group">
                             <label htmlFor="name">Name</label>
-                            <input 
-                                type="text" 
-                                id="name" 
-                                className="form-control" 
-                                placeholder="Enter your name" 
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
+                            <input value={name} onChange={(e) => setName(e.target.value)} type="text" name="name" id="name" className="form-control" placeholder="Enter your name" />
                         </div>
-
-                        {/* Email field */}
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                className="form-control" 
-                                placeholder="Enter your email" 
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
+                            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" name="email" id="email" className="form-control" placeholder="Enter your email" />
                         </div>
-
-                        {/* Phone field */}
                         <div className="form-group">
                             <label htmlFor="phone">Phone</label>
-                            <input 
-                                type="tel" 
-                                id="phone" 
-                                className="form-control" 
-                                placeholder="Enter your phone" 
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                            />
+                            <input value={phone} onChange={(e) => setPhone(e.target.value)} type="text" name="phone" id="phone" className="form-control" placeholder="Enter your phone number" />
                         </div>
-
-                        {/* Password field */}
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <input 
-                                type="password" 
-                                id="password" 
-                                className="form-control" 
-                                placeholder="Enter your password" 
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" className="form-control" placeholder="Create a password" />
                         </div>
-
-                        {showerr && <div className="err" style={{ color: 'red' }}>{showerr.msg || showerr}</div>}
-
-                        <div className="btn-group">
-                            <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">Sign Up</button>
-                        </div>
+                        {showerr && <div className="err" style={{ color: 'red' }}>{showerr}</div>}
+                        <button type="submit" className="btn-primary form-control">Sign Up</button>
+                        <button type="button" className="btn-danger form-control" onClick={resetForm}>Reset</button>
                     </form>
                 </div>
             </div>
         </div>
+        //Sign up role is not stored in database. You can apply logic for this according to your react code.
     );
 }
 
