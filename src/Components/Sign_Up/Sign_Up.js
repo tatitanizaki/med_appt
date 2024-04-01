@@ -31,17 +31,15 @@ const Sign_Up = () => {
         const json = await response.json();
 
         if (json.authtoken) {
-            // Successful registration logic
+            sessionStorage.setItem("auth-token", json.authtoken);
+            sessionStorage.setItem("email", email); // store email in session storage
+            navigate('/'); // Navigate to home page after successful sign up
         } else {
-            // Handle errors. If json.errors is an array, map over it to get messages.
-            const errorMessages = json.errors 
-                ? json.errors.map(err => err.msg).join(", ") // Join all error messages into one string
-                : json.error 
-                    ? json.error.toString() // Convert a single error message to string if it's not one already
-                    : "An unknown error occurred"; // Fallback error message
-            setShowerr(errorMessages);
+            const errorMessage = json.errors 
+                ? json.errors.map(err => err.msg).join(", ")
+                : json.error || "An unknown error occurred";
+            setShowerr(errorMessage);
         }
-        
     };
 
     return (
