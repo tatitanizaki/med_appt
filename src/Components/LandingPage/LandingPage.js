@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./LandingPage.css"; // Updated to camel case
+import "./LandingPage.css";
 
-const LandingPage = () => { // Updated to camel case
+const LandingPage = () => { 
   return (
     <section className="hero-section">
       <div>
@@ -31,4 +31,4 @@ const LandingPage = () => { // Updated to camel case
   );
 };
 
-export default LandingPage; // Updated to camel case
+export default LandingPage;
