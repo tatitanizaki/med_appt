@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './Login.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would usually send the email and password to your server for validation
+    // Here you would send the email and password to your server for validation
     console.log('Email:', email, 'Password:', password);
+
+    // Simulate a successful login scenario
     alert('Login submitted with email ' + email);
+
+    // Navigate to the landing page
+    navigate('/');  // Adjust '/' if your landing page route is different
   };
 
   return (
@@ -28,7 +35,6 @@ function Login() {
                 id="email"
                 className="form-control"
                 placeholder="Enter your email"
-                aria-describedby="emailHelp"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />
