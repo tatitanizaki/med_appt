@@ -15,7 +15,7 @@ const Navbar = () => {
     // Check login status on component mount
     useEffect(() => {
         const token = sessionStorage.getItem('auth-token');
-        const name = sessionStorage.getItem('userName'); // Assuming you store the user name in sessionStorage
+        const name = sessionStorage.getItem('name'); // Assuming you store the user name in sessionStorage
         if (token) {
             setIsLoggedIn(true);
             setUserName(name);
@@ -47,12 +47,20 @@ const Navbar = () => {
                 {isLoggedIn ? (
                     <>
                         <li className="link" style={{ marginRight: '10px' }}>{userName}</li>
-                        <li className="link"><button onClick={handleLogout} className="btn btn-primary">Logout</button></li>
+                        <li className="link">
+                            <button onClick={handleLogout} className="btn1">Logout</button> {/* Use the same class as Sign Up/Login for consistency */}
+                        </li>
                     </>
                 ) : (
                     <>
-                        <li className="link"><Link to="/signup">Sign Up</Link></li>
-                        <li className="link"><Link to="/login">Login</Link></li>
+                        <li className="link">
+                            {/* Wrap Link in button-like styles for consistency */}
+                            <Link to="/signup" className="btn1">Sign Up</Link>
+                        </li>
+                        <li className="link">
+                            {/* Same as above */}
+                            <Link to="/login" className="btn1">Login</Link>
+                        </li>
                     </>
                 )}
             </ul>
