@@ -23,18 +23,15 @@ const Login = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        // name: name,
-        email:email,
-        password: password,
-      }),
-    });
+      body: JSON.stringify({ email, password }),
+  });
 
     const json = await res.json();
     if (json.authtoken) {
       sessionStorage.setItem('auth-token', json.authtoken);
   
-      sessionStorage.setItem('email', email);
+        const userName = email.split('@')[0];
+        sessionStorage.setItem('name', userName);
 
       navigate('/');
       window.location.reload()
