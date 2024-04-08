@@ -13,7 +13,6 @@ function App() {
   return (
     <BrowserRouter>
       <Notification>
-      <Navbar />
         <Routes>
         <Route path="/" element={<LandingPage/>}/>
         <Route path="/signup" element={<SignUp/>}/>
@@ -21,6 +20,7 @@ function App() {
         <Route path="/instant-consultation" element={<InstantConsultation/>} />
         <Route path='/finddoctor' element={<FindDoctorSearch />} />
         <Route path='/search/doctors' element={<BookingConsultation />} />
+       {/* <Route path='/notification' element={<Notification />} /> */}
       </Routes>
       </Notification>
     </BrowserRouter>
