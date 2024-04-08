@@ -19,14 +19,13 @@ const AppointmentForm = ({ doctorName, doctorSpeciality, onSubmit }) => {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         const appointmentDetails = { name, phoneNumber, dateOfAppointment, selectedSlot };
-        onSubmit(appointmentDetails);
         localStorage.setItem('appointmentData', JSON.stringify(appointmentDetails));
-        // Reset form fields
+        onSubmit(appointmentDetails);
         setName('');
         setPhoneNumber('');
         setDateOfAppointment('');
         setSelectedSlot('');
-    };
+    };  
   
     return (
         <form onSubmit={handleFormSubmit} className="appointment-form">
