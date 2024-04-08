@@ -1,32 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 const AppointmentForm = ({ doctorName, doctorSpeciality, onSubmit }) => {
     const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [selectedSlot, setSelectedSlot] = useState('');
-    const [dateOfAppointment, setDateOfAppointment] = useState('');
-  
-    const timeSlots = Array.from({ length: 9 }, (_, index) => `${9 + index}:00`);
+    const [date, setDate] = useState('');
+    const [time, setTime] = useState('');
+    const [selectedSlot, setSelectedSlot] = useState(null);
 
-    const handleSlotSelection = (e) => {
-        setSelectedSlot(e.target.value);
+    const handleSlotSelection = (slot) => {
+        setSelectedSlot(slot);
     };
 
-    const handleDateChange = (e) => {
-        setDateOfAppointment(e.target.value);
-    };
-  
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        const appointmentDetails = { name, phoneNumber, dateOfAppointment, selectedSlot };
-        localStorage.setItem('appointmentData', JSON.stringify(appointmentDetails));
-        onSubmit(appointmentDetails);
+        onSubmit({ name, phoneNumber, date, time });
         setName('');
         setPhoneNumber('');
-        setDateOfAppointment('');
-        setSelectedSlot('');
-    };  
-  
+        setDate('');
+        setTime('');
+
+        
+    };
+
     return (
         <form onSubmit={handleFormSubmit} className="appointment-form">
             <div className="form-group">
@@ -48,29 +43,42 @@ const AppointmentForm = ({ doctorName, doctorSpeciality, onSubmit }) => {
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     required
                 />
-            </div> {/* This div closes the Phone Number form group */}
-            <div className="form-group">
-                <label htmlFor="dateOfAppointment">Date of Appointment:</label>
-                <input
-                    type="date"
-                    id="dateOfAppointment"
-                    value={dateOfAppointment}
-                    onChange={handleDateChange}
-                    required
-                />
             </div>
             <div className="form-group">
-                <label htmlFor="timeSlot">Book Time Slot:</label>
+                <label htmlFor="date">Date of Appointment:</label>
+                <input
+                    type="date"
+                    id="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    required
+                />
+
+            </div>
+            <div className="form-group">
+                <label htmlFor="time">Book Time Slot:</label>
                 <select
-                    id="timeSlot"
-                    value={selectedSlot}
-                    onChange={handleSlotSelection}
+                    id="time"
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
                     required
                 >
                     <option value="">Select a time slot</option>
-                    {timeSlots.map(slot => (
-                        <option key={slot} value={slot}>{slot}</option>
-                    ))}
+                    <option value="9:00 AM">9:00 AM</option>
+                    <option value="9:30 AM">9:30 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="10:30 AM">10:30 AM</option>
+                    <option value="11:00 AM">11:00 AM</option>
+                    <option value="11:30 AM">11:30 AM</option>
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="2:00 PM">2:00 PM</option>
+                    <option value="2:30 PM">2:30 PM</option>
+                    <option value="3:00 PM">3:00 PM</option>
+                    <option value="3:30 PM">3:30 PM</option>
+                    <option value="4:00 PM">4:00 PM</option>
+                    <option value="4:30 PM">4:30 PM</option>
+                    <option value="5:00 PM">5:00 PM</option>
+                    <option value="5:30 PM">5:30 PM</option>
                 </select>
             </div>
             <button type="submit">Book Now</button>
