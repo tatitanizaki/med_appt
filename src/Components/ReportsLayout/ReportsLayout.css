@@ -1,26 +1,26 @@
 .reports-container {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 5% auto;
-    padding: 20px;
+    padding: 30px;
 }
 .report-table {
     width: 100%;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
-    color: #333;
+    color: grey;
 }
 .report-table th,
 .report-table td {
-    padding: 10px;
+    padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid white;
 }
 .report-table th {
-    background-color: #f2f2f2;
+    background-color: white;
 }
 .report-link {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 5px 10px;
     background-color: #007bff;
     color: #fff;
     text-decoration: none;
